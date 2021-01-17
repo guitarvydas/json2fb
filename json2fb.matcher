@@ -1,0 +1,28 @@
+part element {
+  input pre
+  extern list attributes (_)
+  extern list content (_)
+  match ("element" ":" ?kind "attributes" ":" ?list(a), "content" ":" ?list(c)) {
+    newsym <- gensymbol
+    id <- $pre/$newsym
+    Send ($id)
+    "element" $id "elementKind" $id $kind
+    @attributes ($a)
+    @content ($c)
+  }
+}
+
+part attributes {
+  input id
+  input source
+  matchlist (?a ":" ?value) {
+    $a $id $value
+}
+
+part contents {
+  get id
+  extern list element (_ _)
+  matchlist (?stuff) {
+    @element ($stuff $id)
+  }
+}
